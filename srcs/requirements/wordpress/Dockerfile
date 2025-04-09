@@ -14,6 +14,8 @@ RUN apt-get update && apt-get install -y \
 	php-xml php-zip php-bcmath mariadb-client \
 	wget curl unzip less vim \
 	&& rm -rf /var/lib/apt/lists/*
+# add listening 9000 tcp port
+RUN sed -i 's|^listen = .*|listen = 9000|' /etc/php/8.1/fpm/pool.d/www.conf
 
 ENV WORDPRESS_DIR=/var/www/html
 WORKDIR ${WORDPRESS_DIR}
