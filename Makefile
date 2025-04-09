@@ -24,4 +24,28 @@ clean:
 	docker network prune -f
 	docker image prune -f
 
+rm:
+	docker image rm nginx mariadb wordpress
+
+log-nx:
+	docker logs nginx
+
+log-md:
+	docker logs mariadb
+
+log-wp:
+	docker logs wordpress
+
+ps:
+	docker ps
+
+nginx:
+	docker exec -it nginx bash
+
+mariadb:
+	docker exec -it mariadb bash
+
+wordpress:
+	docker exec -it wordpress bash
+
 .PHONY: all build up down restart clean

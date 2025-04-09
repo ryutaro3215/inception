@@ -32,12 +32,17 @@ wp core install \
 	--skip-email --allow-root --path=/var/www/html
 
 echo "Creating additional user..."
-wp user create \
-	${USER} \
-	${USER_EMAIL} \
-	--role=author \
-	--user_pass=${USER_PASSWORD} \
-	--allow-root --path=/var/www/html
+if ! wp user get ${USER} --allow-root --path=/var/www/html > /dev/null 2>&1; then
+    echo "Creating additional user..."
+    wp user create \
+        ${USER} \
+        ${USER_EMAIL} \
+        --role=author \
+        --user_pass=${USER_PASSWORD} \
+        --allow-root --path=/var/www/html
+else
+    echo "User ${USER} already exists. Skipping creation."
+fi
 
 chown -R www-data:www-data /var/www/html
 chmod -R 755 /var/www/html/wp-content
