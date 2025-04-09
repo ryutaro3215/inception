@@ -2,9 +2,10 @@
 
 set -eux
 
-until mysqladmin ping -h ${DB_HOST} -u ${DB_USER} -p${DB_PASSWORD}; do
-	echo "Waiting for mariaDB to be ready..."
-	sleep 1
+echo "Waiting for MariaDB to be ready..."
+until mysqladmin ping -h ${DB_HOST} -u ${DB_USER} -p${DB_PASSWORD} --silent; do
+	echo "Waiting for MariaDB to be ready..."
+	sleep 2
 done
 
 echo "MariaDB is up and running!"
@@ -21,7 +22,7 @@ if [ ! -f /var/www/html/wp-config.php ]; then
 		--path=/var/www/html
 fi
 
-
+echo "Installing WordPress..."
 wp core install \
 	--url=${URL} \
 	--title=${TITLE} \
@@ -30,6 +31,7 @@ wp core install \
 	--admin_email=${ADMIN_EMAIL} \
 	--skip-email --allow-root --path=/var/www/html
 
+echo "Creating additional user..."
 wp user create \
 	${USER} \
 	${USER_EMAIL} \

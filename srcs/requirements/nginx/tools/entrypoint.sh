@@ -13,7 +13,7 @@ if [ ! -f "$CRT" ] || [ ! -f "$KEY" ]; then
 	echo "Generating secret key"
 	openssl genrsa -out $KEY 2048
 	echo "Generating CSR"
-	openssl req -new -key $KEY -out $CSR 
+	openssl req -new -key $KEY -out $CSR -subj "/C=JP/ST=Tokyo/L=Tokyo/O=42Tokyo/OU=42Tokyo/CN=rmatsuba.42.jp"
 	echo "Generating CRT" 
 	openssl x509 -days 398 -req -signkey $KEY -in $CSR -out $CRT
 	echo "removing CSR"
