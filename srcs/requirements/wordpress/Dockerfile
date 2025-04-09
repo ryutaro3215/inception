@@ -15,6 +15,11 @@ RUN apt-get update && apt-get install -y \
 	wget curl unzip less vim \
 	&& rm -rf /var/lib/apt/lists/*
 
+# Configure PHP-FPM
+RUN sed -i 's/listen = \/run\/php\/php8.1-fpm.sock/listen = 9000/g' /etc/php/8.1/fpm/pool.d/www.conf \
+	&& sed -i 's/;listen.allowed_clients/listen.allowed_clients/g' /etc/php/8.1/fpm/pool.d/www.conf \
+	&& sed -i 's/;clear_env/clear_env/g' /etc/php/8.1/fpm/pool.d/www.conf
+
 ENV WORDPRESS_DIR=/var/www/html
 WORKDIR ${WORDPRESS_DIR}
 

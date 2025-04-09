@@ -44,4 +44,6 @@ chmod -R 755 /var/www/html/wp-content
 
 echo "WordPress installation completed successfully!"
 echo "Starting PHP-FPM..."
-exec php-fpm8.1 -F
+
+# Start PHP-FPM in the foreground
+php-fpm8.1 -F
