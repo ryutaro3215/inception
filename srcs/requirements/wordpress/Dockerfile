@@ -15,6 +15,15 @@ RUN apt-get update && apt-get install -y \
 	wget curl unzip less vim \
 	&& rm -rf /var/lib/apt/lists/*
 
+# Configure PHP-FPM
+RUN sed -i 's/listen = \/run\/php\/php8.1-fpm.sock/listen = 9000/g' /etc/php/8.1/fpm/pool.d/www.conf \
+	&& sed -i 's/;listen.allowed_clients/listen.allowed_clients/g' /etc/php/8.1/fpm/pool.d/www.conf \
+	&& sed -i 's/;clear_env/clear_env/g' /etc/php/8.1/fpm/pool.d/www.conf \
+	&& sed -i 's/;pm.max_children/pm.max_children/g' /etc/php/8.1/fpm/pool.d/www.conf \
+	&& sed -i 's/;pm.start_servers/pm.start_servers/g' /etc/php/8.1/fpm/pool.d/www.conf \
+	&& sed -i 's/;pm.min_spare_servers/pm.min_spare_servers/g' /etc/php/8.1/fpm/pool.d/www.conf \
+	&& sed -i 's/;pm.max_spare_servers/pm.max_spare_servers/g' /etc/php/8.1/fpm/pool.d/www.conf
+
 ENV WORDPRESS_DIR=/var/www/html
 WORKDIR ${WORDPRESS_DIR}
 
@@ -24,7 +33,6 @@ RUN wget https://wordpress.org/latest.tar.gz && \
 	chown -R www-data:www-data ${WORDPRESS_DIR} && \
 	curl -O https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar && \
 	chmod +x wp-cli.phar && mv wp-cli.phar /usr/local/bin/wp
-
 
 COPY ./tools/entrypoint.sh /usr/local/bin/entrypoint.sh
 RUN chmod +x /usr/local/bin/entrypoint.sh
