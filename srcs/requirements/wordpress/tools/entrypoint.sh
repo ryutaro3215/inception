@@ -51,4 +51,4 @@ echo "WordPress installation completed successfully!"
 echo "Starting PHP-FPM..."
 
 # Start PHP-FPM in the foreground
-php-fpm8.1 -F
+exec php-fpm8.1 -F
