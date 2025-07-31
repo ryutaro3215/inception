@@ -3,6 +3,8 @@ version: "3.9"
 services:
   nginx:
     container_name: nginx
+    extra_hosts:
+      - "rmatsuba.42.jp:127.0.0.1"
     build:
       context: ./requirements/nginx
       dockerfile: Dockerfile
@@ -35,6 +37,8 @@ services:
 
   wordpress:
     container_name: wordpress
+    extra_hosts:
+      - "rmatsuba.42.jp:127.0.0.1"
     build:
       context: ./requirements/wordpress
       dockerfile: Dockerfile
