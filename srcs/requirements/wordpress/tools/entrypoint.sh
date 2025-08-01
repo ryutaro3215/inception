@@ -24,12 +24,14 @@ fi
 
 echo "Installing WordPress..."
 wp core install \
-	--url=${URL} \
-	--title=${TITLE} \
-	--admin_user=${ADMIN_USER} \
-	--admin_password=${ADMIN_PASSWORD} \
-	--admin_email=${ADMIN_EMAIL} \
-	--skip-email --allow-root --path=/var/www/html
+		--url="${URL}" \
+		--title="${TITLE}" \
+		--admin_user="${ADMIN_USER}" \
+		--admin_password="${ADMIN_PASSWORD}" \
+		--admin_email="${ADMIN_EMAIL}" \
+		--skip-email \
+		--allow-root \
+		--path=/var/www/html
 
 echo "Creating additional user..."
 if ! wp user get ${USER} --allow-root --path=/var/www/html > /dev/null 2>&1; then

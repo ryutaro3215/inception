@@ -58,13 +58,15 @@ volumes:
     driver: local
     driver_opts:
       type: "none"
-      device: "/home/rmatsuba/data/mariadb"
+      # device: "/home/rmatsuba/data/mariadb"
+      device: "/Users/ryutaro320515/development/inception/data/mariadb"
       o: "bind"
   wordpress_files:
     driver: local
     driver_opts:
       type: "none"
-      device: "/home/rmatsuba/data/wordpress"
+      # device: "/home/rmatsuba/data/wordpress"
+      device: "/Users/ryutaro320515/development/inception/data/wordpress"
       o: "bind"
 
 networks:

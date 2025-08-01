@@ -2,29 +2,32 @@
 set -eux
 
 check_run_mysqld() {
-	echo "[Check] Checking /run/mysqld..."
-	if [ ! -d /run/mysqld ]; then
-		mkdir -p /run/mysqld
-		chown -R mysql:mysql /run/mysqld
+	echo "[check] checking /run/mysqld..."
+	mkdir -p /run/mysqld
+	chown -R mysql:mysql /run/mysqld
+
+	# Remove stale socket file if exists
+	if [ -S /run/mysqld/mysqld.sock ]; then
+		echo "[cleanup] removing stale mysqld.sock"
+		rm -f /run/mysqld/mysqld.sock
 	fi
 }
 
 init_mariadb() {
 	if [ ! -f /var/lib/mysql/.initialized ]; then
-		echo "[Init] Initializing MariaDB..."
-		chown -R mysql:mysql /var/lib/mysql
+		echo "[init] initializing mariadb..."
+		chown -r mysql:mysql /var/lib/mysql
 		mariadb-install-db --user=mysql --datadir=/var/lib/mysql --skip-test-db
 
-		echo "[Init] Creating user and database..."
-		/usr/sbin/mariadbd --user=mysql --bootstrap <<-EOSQL
-			FLUSH PRIVILEGES;
-			ALTER USER 'root'@'localhost' IDENTIFIED BY '${MYSQL_ROOT_PASSWORD}';
-			CREATE DATABASE IF NOT EXISTS \`${MYSQL_DATABASE}\`;
-			CREATE USER IF NOT EXISTS '${MYSQL_USER}'@'%' IDENTIFIED BY '${MYSQL_PASSWORD}';
-			GRANT ALL PRIVILEGES ON \`${MYSQL_DATABASE}\`.* TO '${MYSQL_USER}'@'%';
-			FLUSH PRIVILEGES;
-EOSQL
-
+		echo "[init] creating user and database..."
+		/usr/sbin/mariadbd --user=mysql --bootstrap <<< "
+		FLUSH PRIVILEGES;
+		ALTER USER 'root'@'localhost' IDENTIFIED BY '${MYSQL_ROOT_PASSWORD}';
+		CREATE DATABASE IF NOT EXISTS \`${MYSQL_DATABASE}\`;
+		CREATE USER IF NOT EXISTS '${MYSQL_USER}'@'%' IDENTIFIED BY '${MYSQL_PASSWORD}';
+		GRANT ALL PRIVILEGES ON \`${MYSQL_DATABASE}\`.* TO '${MYSQL_USER}'@'%';
+		FLUSH PRIVILEGES;
+		"
 		touch /var/lib/mysql/.initialized
 	fi
 }
