@@ -14,22 +14,20 @@ check_run_mysqld() {
 }
 
 init_mariadb() {
-	if [ ! -f /var/lib/mysql/.initialized ]; then
-		echo "[init] initializing mariadb..."
-		chown -r mysql:mysql /var/lib/mysql
-		mariadb-install-db --user=mysql --datadir=/var/lib/mysql --skip-test-db
+	echo "[init] initializing mariadb..."
+	chown -R mysql:mysql /var/lib/mysql
+	mariadb-install-db --user=mysql --datadir=/var/lib/mysql --skip-test-db
 
-		echo "[init] creating user and database..."
-		/usr/sbin/mariadbd --user=mysql --bootstrap <<< "
-		FLUSH PRIVILEGES;
-		ALTER USER 'root'@'localhost' IDENTIFIED BY '${MYSQL_ROOT_PASSWORD}';
-		CREATE DATABASE IF NOT EXISTS \`${MYSQL_DATABASE}\`;
-		CREATE USER IF NOT EXISTS '${MYSQL_USER}'@'%' IDENTIFIED BY '${MYSQL_PASSWORD}';
-		GRANT ALL PRIVILEGES ON \`${MYSQL_DATABASE}\`.* TO '${MYSQL_USER}'@'%';
-		FLUSH PRIVILEGES;
-		"
-		touch /var/lib/mysql/.initialized
-	fi
+	echo "[init] creating user and database..."
+	/usr/sbin/mariadbd --user=mysql --bootstrap <<< "
+	FLUSH PRIVILEGES;
+	ALTER USER 'root'@'localhost' IDENTIFIED BY '${MYSQL_ROOT_PASSWORD}';
+	CREATE DATABASE IF NOT EXISTS \`${MYSQL_DATABASE}\`;
+	CREATE USER IF NOT EXISTS '${MYSQL_USER}'@'%' IDENTIFIED BY '${MYSQL_PASSWORD}';
+	GRANT ALL PRIVILEGES ON \`${MYSQL_DATABASE}\`.* TO '${MYSQL_USER}'@'%';
+	FLUSH PRIVILEGES;
+	"
+	touch /var/lib/mysql/.initialized
 }
 
 start_mariadb() {
