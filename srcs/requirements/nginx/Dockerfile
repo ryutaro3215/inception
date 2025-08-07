@@ -1,7 +1,7 @@
 # setting docker image of nginx with openssl
 # use ubuntu which is not the latest version as base image
 # generating secret key and self-signed certification in ./tools/entorypoint.sh
-FROM ubuntu:22.04
+FROM debian:bullseye
 
 RUN apt-get update && apt-get install -y \
     nginx \

@@ -34,6 +34,9 @@ services:
     restart: always
     env_file:
       - .env
+    secrets:
+      - mysql_db_password
+      - mysql_db_root_password
 
   wordpress:
     container_name: wordpress
@@ -52,6 +55,10 @@ services:
     restart: always
     env_file:
       - .env
+    secrets:
+      - db-password
+      - wp-admin-password
+      - wp-user-password
 
 volumes:
   mariadb_data:
@@ -72,4 +79,17 @@ volumes:
 networks:
   inception:
     driver: bridge
+
+
+secrets:
+  mysql-db-password:
+    file: ../secrets/mysql_db_password.txt
+  mysql-db-root-password:
+    file: ../secrets/mysql_db_root_password.txt
+  db-password:
+    file: ../secrets/db_password.txt
+  wp-admin-password:
+    file: ../secrets/wp_admin_password.txt
+  wp-user-password:
+    file: ../secrets/wp_user_password.txt
 

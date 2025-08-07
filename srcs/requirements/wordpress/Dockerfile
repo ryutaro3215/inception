@@ -5,7 +5,7 @@
 # 2. install wordpress
 # 3. exec entrypoint.sh
 
-FROM ubuntu:22.04
+FROM debian:bullseye
 
 ENV DEBIAN_FRONTEND=noninteractive
 
