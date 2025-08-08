@@ -2,6 +2,10 @@
 
 set -eux
 
+export DB_PASSWORD="$(cat /run/secrets/db_password)";
+export ADMIN_PASSWORD="$(cat /run/secrets/wp_admin_password)";
+export USER_PASSWORD="$(cat /run/secrets/wp_user_password)";
+
 echo "Waiting for MariaDB to be ready..."
 until mysqladmin ping -h ${DB_HOST} -u ${DB_USER} -p${DB_PASSWORD} --silent; do
 	echo "Waiting for MariaDB to be ready..."

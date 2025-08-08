@@ -1,6 +1,10 @@
 #!/bin/bash
 set -eux
 
+export MYSQL_PASSWORD="$(cat /run/secrets/mysql_db_password)" 
+
+export MYSQL_ROOT_PASSWORD="$(cat /run/secrets/mysql_db_root_password)" 
+
 check_run_mysqld() {
 	echo "[check] checking /run/mysqld..."
 	mkdir -p /run/mysqld
