@@ -16,7 +16,7 @@ check_run_mysqld() {
 init_mariadb() {
 	if [ ! -f /var/lib/mysql/.initialized ]; then
 		echo "[init] initializing mariadb..."
-		chown -r mysql:mysql /var/lib/mysql
+		chown -R mysql:mysql /var/lib/mysql
 		mariadb-install-db --user=mysql --datadir=/var/lib/mysql --skip-test-db
 
 		echo "[init] creating user and database..."
