@@ -2,6 +2,18 @@
 
 set -eux
 
+if [ -f /run/secrets/db-password ]; then
+  export DB_PASSWORD="$(cat /run/secrets/db-password)"
+fi
+
+if [ -f /run/secrets/wp-admin-password ]; then
+  export ADMIN_PASSWORD="$(cat /run/secrets/wp-admin-password)"
+fi
+
+if [ -f /run/secrets/wp-user-password ]; then
+  export USER_PASSWORD="$(cat /run/secrets/wp-user-password)"
+fi
+
 echo "Waiting for MariaDB to be ready..."
 until mysqladmin ping -h ${DB_HOST} -u ${DB_USER} -p${DB_PASSWORD} --silent; do
 	echo "Waiting for MariaDB to be ready..."
@@ -52,5 +64,6 @@ chmod -R 755 /var/www/html/wp-content
 echo "WordPress installation completed successfully!"
 echo "Starting PHP-FPM..."
 
-# Start PHP-FPM in the foreground
+mkdir -p /run/php
+chown -R www-data:www-data /run/php
 exec php-fpm8.1 -F

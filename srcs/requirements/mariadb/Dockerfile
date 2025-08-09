@@ -3,7 +3,7 @@
 # making a new root user and wordpress user in init.sh
 # configuration file is in ./conf/default.conf
 
-FROM ubuntu:22.04
+FROM debian:bullseye
 
 RUN apt-get update && apt-get install -y \
 	mariadb-server \

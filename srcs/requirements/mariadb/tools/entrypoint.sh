@@ -1,6 +1,13 @@
 #!/bin/bash
 set -eux
 
+if [ -f /run/secrets/mysql-db-root-password ]; then
+  export MYSQL_ROOT_PASSWORD="$(cat /run/secrets/mysql-db-root-password)"
+fi
+if [ -f /run/secrets/mysql-db-password ]; then
+  export MYSQL_PASSWORD="$(cat /run/secrets/mysql-db-password)"
+fi
+
 check_run_mysqld() {
 	echo "[check] checking /run/mysqld..."
 	mkdir -p /run/mysqld
@@ -17,7 +24,6 @@ init_mariadb() {
 	echo "[init] initializing mariadb..."
 	chown -R mysql:mysql /var/lib/mysql
 	mariadb-install-db --user=mysql --datadir=/var/lib/mysql --skip-test-db
-
 	echo "[init] creating user and database..."
 	/usr/sbin/mariadbd --user=mysql --bootstrap <<< "
 	FLUSH PRIVILEGES;

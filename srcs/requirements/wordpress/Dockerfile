@@ -5,15 +5,20 @@
 # 2. install wordpress
 # 3. exec entrypoint.sh
 
-FROM ubuntu:22.04
+FROM debian:bullseye
 
 ENV DEBIAN_FRONTEND=noninteractive
 
-RUN apt-get update && apt-get install -y \
-	php-fpm php-mysql php-curl php-gd php-mbstring \
-	php-xml php-zip php-bcmath mariadb-client \
-	wget curl unzip less vim \
-	&& rm -rf /var/lib/apt/lists/*
+# --- install PHP 8.1 on Debian Bullseye ---
+RUN apt-get update && apt-get install -y lsb-release apt-transport-https ca-certificates curl gnupg2 && \
+    curl -sSL https://packages.sury.org/php/apt.gpg | apt-key add - && \
+    echo "deb https://packages.sury.org/php/ $(lsb_release -sc) main" > /etc/apt/sources.list.d/php.list && \
+    apt-get update && \
+    apt-get install -y \
+        php8.1-fpm php8.1-mysql php8.1-curl php8.1-gd php8.1-mbstring \
+        php8.1-xml php8.1-zip php8.1-bcmath mariadb-client \
+        wget curl unzip less vim && \
+    rm -rf /var/lib/apt/lists/*
 # add listening 9000 tcp port
 RUN sed -i 's|^listen = .*|listen = 9000|' /etc/php/8.1/fpm/pool.d/www.conf
 
